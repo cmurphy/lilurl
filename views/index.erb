@@ -1,0 +1,7 @@
+<form action="makeurl" method="post">
+  Your URL: <input type="text" name="oldurl" />
+</form>
+
+<% if defined? newurl %>
+Your tiny CAT URL: <%= "localhost:4567/" + newurl %>
+<% end %>
