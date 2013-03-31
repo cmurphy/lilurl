@@ -2,6 +2,8 @@ require 'rubygems'
 require 'sinatra'
 require 'translate.rb'
 
+set :bind, '0.0.0.0'
+
 $domain = 'localhost:4567'
 
 get '/' do
