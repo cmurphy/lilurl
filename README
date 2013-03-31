@@ -1,0 +1,1 @@
+This is a simple URL shortener written in ruby and using SQLite as the backend database.
