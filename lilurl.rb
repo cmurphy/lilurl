@@ -2,6 +2,8 @@ require 'rubygems'
 require 'sinatra'
 require 'translate.rb'
 
+$domain = 'localhost:4567'
+
 get '/' do
   erb :index
 end
@@ -16,6 +18,5 @@ end
 post '/makeurl' do
   oldurl = params[:oldurl]
   newurl=makeurl(oldurl)
-  #newurl
-  erb :index, :locals => {:newurl => newurl}
+  erb :index, :locals => {:domain => $domain, :newurl => newurl}
 end

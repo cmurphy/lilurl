@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CAT URL</title>
+  <title>Lil' Url</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
     body {
-      background-color: blue;
+      font-family: sans-serif;
+      background-color: #eee;
+    }
+    header {
+      background-color: black;
+      color: white;
+      padding: 10px;
+      border-bottom: 7px solid #10C2E6;
+    }
+    h1 {
+      text-align: center;
+    }
+    div {
+      padding: 12px;
+      margin-top: 50px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Lil' Url</h1>
+  </header>
+  <div>
   <%=yield %>
+  </div>
 </body>
 </html>
