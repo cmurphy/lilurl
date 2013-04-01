@@ -32,10 +32,20 @@ def makeurl(oldurl)
   statement.bind_param 1, hash
   statement.bind_param 2, oldurl
   response = statement.execute
+  statement.close if statement
+  urldb.close if urldb
   return hash
+rescue SQLite3::ConstraintException => e
+  # column hash is not unique
+  puts "not unique"
+  statement = urldb.prepare "SELECT hash FROM urls WHERE url = ?"
+  statement.bind_param 1, oldurl
+  response = statement.execute
+  row = response.next
+  statement.close if statement
+  return row.join "\s" #If we've already seen this URL, give the existing hash for it
 rescue SQLite3::Exception => e
-  puts "A database error occured: " + e
-ensure
+  puts "A database error occured: " + e #TODO: this should be rescued in lilurl.rb and displayed in index.erb
   statement.close if statement
   urldb.close if urldb
 end
