@@ -24,5 +24,7 @@ post '/' do
     erb :index, :locals => {:domain => $domain, :newurl => newurl, :error => nil}
   rescue ArgumentError => e
     erb :index, :locals => {:error => e.to_s }
+  rescue SQLite3::Exception => e
+    erb :index, :locals => {:error => "Database error: " + e.to_s }
   end
 end

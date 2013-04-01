@@ -45,7 +45,7 @@ rescue SQLite3::ConstraintException => e
   statement.close if statement
   return row.join "\s" #If we've already seen this URL, give the existing hash for it
 rescue SQLite3::Exception => e
-  puts "A database error occured: " + e #TODO: this should be rescued in lilurl.rb and displayed in index.erb
   statement.close if statement
   urldb.close if urldb
+  raise SQLite3::Exception.new(e.to_s)
 end
