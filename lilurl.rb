@@ -18,7 +18,7 @@ end
 
 post '/' do
   if settings.development?
-    port = ":4567"
+     port = ":" + settings.port.to_s
   else
     port = ""
   end
