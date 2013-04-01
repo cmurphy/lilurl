@@ -1,10 +1,9 @@
 require 'rubygems'
 require 'sinatra'
 require 'translate.rb'
+require 'sinatra/sugar'
 
 set :bind, '0.0.0.0'
-
-$domain = 'localhost:4567'
 
 get '/' do
   erb :index, :locals => {:error => nil}
@@ -18,10 +17,16 @@ get '/:hash' do
 end
 
 post '/' do
+  if settings.development?
+    port = ":4567"
+  else
+    port = ""
+  end
+
   begin
     oldurl = params[:oldurl]
     newurl=makeurl(oldurl)
-    erb :index, :locals => {:domain => $domain, :newurl => newurl, :error => nil}
+    erb :index, :locals => {:domain => request.host + port, :newurl => newurl, :error => nil}
   rescue ArgumentError => e
     erb :index, :locals => {:error => e.to_s }
   rescue SQLite3::Exception => e
