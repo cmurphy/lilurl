@@ -24,8 +24,24 @@
     }
     div {
       padding: 12px;
-      margin-top: 50px;
       text-align: center;
+      -moz-border-radius: 4px;
+      -webkit-border-radius: 4px;
+    }
+    div#wrapper {
+      margin-top: 50px;
+    }
+    div#error {
+      border: 3px solid #F51B51;
+      background-color: #EDC2CD;
+      width: 50%;
+      margin: 0 auto;
+    }
+    div#newurl {
+      border: 3px solid #4FDB5B;
+      background-color: #DAEDDC;
+      width: 50%;
+      margin: 0 auto;
     }
     #submit {
       /* Button ideas taken from 
@@ -59,7 +75,7 @@
   <header>
     <h1>Lil' Url</h1>
   </header>
-  <div>
+  <div id="wrapper">
   <%=yield %>
   </div>
 </body>

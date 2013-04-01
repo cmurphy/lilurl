@@ -19,6 +19,11 @@ ensure
 end
 
 def makeurl(oldurl)
+  # error check oldurl
+  # use a try/catch to raise an exception
+  if !(oldurl =~ /^http:\/\//) or oldurl.nil?
+    raise ArgumentError.new('Please submit a valid HTTP URL.')
+  end
   hash = Digest::SHA1.hexdigest oldurl
   hash = hash[0..5]
   urldb = SQLite3::Database.open $dbfile
@@ -29,7 +34,7 @@ def makeurl(oldurl)
   response = statement.execute
   return hash
 rescue SQLite3::Exception => e
-  puts "An error occured: " + e
+  puts "A database error occured: " + e
 ensure
   statement.close if statement
   urldb.close if urldb

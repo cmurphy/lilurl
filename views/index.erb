@@ -6,5 +6,12 @@
 </form>
 <br />
 <% if defined? newurl %>
+<div id="newurl">
 Your tiny CAT URL: <%= domain + "/" + newurl %>
+</div>
+<% end %>
+<% if defined? error and !error.nil? %>
+<div id="error">
+There was an error: <%= error %>
+</div>
 <% end %>
