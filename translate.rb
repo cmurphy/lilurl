@@ -7,7 +7,6 @@ $dbfile = 'lilurl.db'
 def geturl(hash)
   urldb = SQLite3::Database.open $dbfile
   statement = urldb.prepare "SELECT url FROM urls WHERE hash = ?"
-  #hash = '000001'
   statement.bind_param 1, hash
   response = statement.execute
   row = response.next # since hash is a primary key this query should only return one result
@@ -20,7 +19,6 @@ ensure
 end
 
 def makeurl(oldurl)
-#  oldurl + "hi"
   hash = Digest::SHA1.hexdigest oldurl
   hash = hash[0..5]
   urldb = SQLite3::Database.open $dbfile

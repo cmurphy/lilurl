@@ -17,7 +17,7 @@ get '/:hash' do
   end
 end
 
-post '/makeurl' do
+post '/' do
   oldurl = params[:oldurl]
   newurl=makeurl(oldurl)
   erb :index, :locals => {:domain => $domain, :newurl => newurl}
