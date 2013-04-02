@@ -25,7 +25,7 @@ end
 
 def makeurl(oldurl, postfix = nil)
   # error check oldurl
-  if !(oldurl =~ /^http:\/\//) or oldurl.nil?
+  if (!(oldurl =~ /^http:\/\//) and !(oldurl =~ /^https:\/\//)) or oldurl.nil?
     raise ArgumentError.new('Please submit a valid HTTP URL.')
   end
   if !postfix.empty?
