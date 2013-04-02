@@ -6,13 +6,14 @@ $dbfile = 'lilurl.db'
 
 def geturl(hash)
   urldb = SQLite3::Database.open $dbfile
-  statement = urldb.prepare "SELECT url FROM urls WHERE hash = ?"
+  statement = urldb.prepare "SELECT url FROM urls WHERE hashid = ?"
   statement.bind_param 1, hash
   response = statement.execute
   row = response.next # since hash is a primary key this query should only return one result
   #TODO: this shouldn't fail so hard when there's no match
   return row.join "\s"
 rescue SQLite3::Exception => e
+  #TODO: This should be handled in index.erb
   puts "An error occured: " + e
 ensure
   statement.close if statement
@@ -34,7 +35,7 @@ def makeurl(oldurl, postfix = nil)
     hash = hash[0..5]
   end
   urldb = SQLite3::Database.open $dbfile
-  urldb.execute "CREATE TABLE IF NOT EXISTS urls(hash varchar(20) primary key, url varchar(500))"
+  urldb.execute "CREATE TABLE IF NOT EXISTS urls(hashid varchar(20) primary key, url varchar(500))"
   statement = urldb.prepare "INSERT INTO urls VALUES (?, ?)"
   statement.bind_param 1, hash
   statement.bind_param 2, oldurl
@@ -49,7 +50,7 @@ rescue SQLite3::ConstraintException => e
 
   # First, see if the postfix was set and is already in there
   if !postfix.empty?
-    statement = urldb.prepare "SELECT hash FROM urls WHERE hash = ?"
+    statement = urldb.prepare "SELECT hashid FROM urls WHERE hashid = ?"
     statement.bind_param 1, postfix
     response = statement.execute
     row = response.next
