@@ -1,0 +1,80 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: sans-serif;
+    background-color: #eee;
+}
+header {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-bottom: 7px solid #10C2E6;
+  -moz-box-shadow: 0 0 3px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+h1 {
+  text-align: center;
+}
+div {
+  padding: 12px;
+  text-align: center;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+div#wrapper {
+  margin-top: 50px;
+}
+div#error {
+  border: 3px solid #F51B51;
+  background-color: #EDC2CD;
+  width: 50%;
+  margin: 0 auto;
+}
+div#newurl {
+  border: 3px solid #4FDB5B;
+  background-color: #DAEDDC;
+  width: 50%;
+  margin: 0 auto;
+}
+label {
+  display: block;
+  margin: auto;
+}
+input {
+  display: block;
+  margin: 20px auto;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+#submit {
+  /* Button ideas taken from
+     http://coding.smashingmagazine.com/2009/12/02/pushing-your-buttons-with-practical-css3/
+  */
+  height: 40px;
+  width: 10%;
+  background-color: #13A3BF;
+  color: #fff;
+  font-weight: bold;
+  border: 2px solid #2E5F69;
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+  cursor: pointer;
+}
+.textfield {
+  height: 20px;
+  padding: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 4px solid #13A3BF;
+}
+#oldurl {
+  width: 400px;
+}
+#postfix {
+  width: 200px;
+}
