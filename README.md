@@ -21,6 +21,6 @@ or:
 
 ## Dependencies:
 
-ruby >= 1.9.2, sqlite3
+ruby 1.8.7
 
 **Gems:** rubygems, sqlite3, sinatra, digest/sha1
