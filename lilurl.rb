@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'sinatra'
 require './translate.rb'
-require 'sinatra/sugar'
 
 set :bind, '0.0.0.0'
 
