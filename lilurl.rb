@@ -25,7 +25,8 @@ post '/' do
 
   begin
     oldurl = params[:oldurl]
-    newurl=makeurl(oldurl)
+    postfix = params[:postfix]
+    newurl=makeurl(oldurl, postfix)
     erb :index, :locals => {:domain => request.host + port, :newurl => newurl, :error => nil}
   rescue ArgumentError => e
     erb :index, :locals => {:error => e.to_s }
