@@ -10,6 +10,7 @@ def geturl(hash)
   statement.bind_param 1, hash
   response = statement.execute
   row = response.next # since hash is a primary key this query should only return one result
+  #TODO: this shouldn't fail so hard when there's no match
   return row.join "\s"
 rescue SQLite3::Exception => e
   puts "An error occured: " + e
@@ -33,7 +34,7 @@ def makeurl(oldurl, postfix = nil)
     hash = hash[0..5]
   end
   urldb = SQLite3::Database.open $dbfile
-  urldb.execute "CREATE TABLE IF NOT EXISTS urls(hash varchar(20) primary key, url varchar(300))"
+  urldb.execute "CREATE TABLE IF NOT EXISTS urls(hash varchar(20) primary key, url varchar(500))"
   statement = urldb.prepare "INSERT INTO urls VALUES (?, ?)"
   statement.bind_param 1, hash
   statement.bind_param 2, oldurl
