@@ -4,11 +4,6 @@ require 'digest/sha1'
 
 $dbfile = 'lilurl.db'
 
-def usage
-  puts "ruby lilurl.rb [--test]"
-  puts "Specify --test when running on a test webserver to use port 4567."
-end
-
 def geturl(hash)
   urldb = SQLite3::Database.open $dbfile
   statement = urldb.prepare "SELECT url FROM urls WHERE hash = ?"
