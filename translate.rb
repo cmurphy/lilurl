@@ -38,7 +38,7 @@ def makeurl(oldurl, postfix = nil)
     hash = hash[0..5]
   end
   urldb = SQLite3::Database.open $dbfile
-  urldb.execute "CREATE TABLE IF NOT EXISTS urls(hash varchar(20) primary key, url varchar(100))"
+  urldb.execute "CREATE TABLE IF NOT EXISTS urls(hash varchar(20) primary key, url varchar(300))"
   statement = urldb.prepare "INSERT INTO urls VALUES (?, ?)"
   statement.bind_param 1, hash
   statement.bind_param 2, oldurl
