@@ -1,13 +1,10 @@
 <form action="" method="post">
-  Your URL: <br />
+  <label for="oldurl">Your URL:</label>
   <input id="oldurl" class="textfield" type="text" name="oldurl" />
-  <br />
-  Prefered URL postfix, 20 characters or less (optional): <br />
+  <label for="postfix">Prefered URL postfix, 20 characters or less (optional):</label>
   <input id="postfix" class="textfield" type="text" name="postfix" maxlength="20"/>
-  <br />
   <input id="submit" type="submit" value="Shorten my URL"/>
 </form>
-<br />
 <% if defined? newurl %>
 <div id="newurl">
 Your tiny CAT URL: <%= domain + "/" + newurl %>
