@@ -7,7 +7,7 @@ $dbfile = 'lilurl.db'
 def geturl(hash)
   urldb = SQLite3::Database.open $dbfile
   statement = urldb.prepare "SELECT url FROM urls WHERE hashid = ?"
-  statement.bind_param 1, hash
+  statement.bind_param 1, dbstring(hash)
   response = statement.execute
   row = response.next # since hash is a primary key this query should only return one result
   #TODO: this shouldn't fail so hard when there's no match
@@ -37,8 +37,8 @@ def makeurl(oldurl, postfix = nil)
   urldb = SQLite3::Database.open $dbfile
   urldb.execute "CREATE TABLE IF NOT EXISTS urls(hashid varchar(20) primary key, url varchar(500))"
   statement = urldb.prepare "INSERT INTO urls VALUES (?, ?)"
-  statement.bind_param 1, hash
-  statement.bind_param 2, oldurl
+  statement.bind_param 1, dbstring(hash)
+  statement.bind_param 2, dbstring(oldurl)
   response = statement.execute
   statement.close if statement
   urldb.close if urldb
@@ -51,7 +51,7 @@ rescue SQLite3::ConstraintException => e
   # First, see if the postfix was set and is already in there
   if !postfix.empty?
     statement = urldb.prepare "SELECT hashid FROM urls WHERE hashid = ?"
-    statement.bind_param 1, postfix
+    statement.bind_param 1, dbstring(postfix)
     response = statement.execute
     row = response.next
     statement.close if statement
@@ -67,4 +67,12 @@ rescue SQLite3::Exception => e
   statement.close if statement
   urldb.close if urldb
   raise SQLite3::Exception.new(e.to_s)
+end
+
+def dbstring(s)
+  if s.respond_to?(:encode)
+    return s.encode("UTF-8")
+  else
+    return s
+  end
 end
