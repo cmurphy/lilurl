@@ -7,8 +7,6 @@ and using SQLite as the backend database.
 
 ## Dependencies:
 
-ruby 1.8.7
-
 **Gems:** rubygems, sqlite3, sinatra, digest/sha1
 
 ## Usage
@@ -39,7 +37,7 @@ Add the following to your apache configuration file:
 
     <VirtualHost *:80>
        ServerName example.com
-       DocumentRoot /somewhere/public    
+       DocumentRoot /somewhere/public
        <Directory /somewhere/public>
           order allow,deny
           Allow from all
