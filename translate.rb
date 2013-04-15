@@ -16,8 +16,9 @@ def geturl(hash)
     raise ArgumentError.new('LilUrl didn\'t find that URL. Are you sure you copied it right?')
   end
 rescue SQLite3::Exception => e
-  #TODO: This should be handled in index.erb
-  puts "An error occured: " + e
+  statement.close if statement
+  urldb.close if urldb
+  raise SQLite3::Exception.new(e.to_s)
 ensure
   statement.close if statement
   urldb.close if urldb
