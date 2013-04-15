@@ -10,7 +10,7 @@ end
 
 get '/:hash' do
   begin
-    if (params[:hash] != "favicon.ico")
+    if params[:hash] != "favicon.ico"
       newurl=geturl(params[:hash])
       redirect to(newurl)
     end
