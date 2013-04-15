@@ -9,9 +9,13 @@ get '/' do
 end
 
 get '/:hash' do
-  if (params[:hash] != "favicon.ico")
-    newurl=geturl(params[:hash])
-    redirect to(newurl)
+  begin
+    if (params[:hash] != "favicon.ico")
+      newurl=geturl(params[:hash])
+      redirect to(newurl)
+    end
+  rescue ArgumentError => e
+    erb :index, :locals => {:error => e.to_s}
   end
 end
 

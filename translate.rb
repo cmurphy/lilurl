@@ -10,8 +10,11 @@ def geturl(hash)
   statement.bind_param 1, dbstring(hash)
   response = statement.execute
   row = response.next # since hash is a primary key this query should only return one result
-  #TODO: this shouldn't fail so hard when there's no match
-  return row.join "\s"
+  if !row.nil?
+    return row.join "\s"
+  else
+    raise ArgumentError.new('LilUrl didn\'t find that URL. Are you sure you copied it right?')
+  end
 rescue SQLite3::Exception => e
   #TODO: This should be handled in index.erb
   puts "An error occured: " + e
