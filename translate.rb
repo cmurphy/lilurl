@@ -31,8 +31,8 @@ def makeurl(oldurl, postfix = nil)
     end
     hash = postfix
   else
-    hash = Digest::SHA1.hexdigest oldurl
-    hash = hash[0..5]
+    sha = Digest::SHA1.hexdigest oldurl
+    hash = sha[0..5]
   end
   urldb = SQLite3::Database.open $dbfile
   urldb.execute "CREATE TABLE IF NOT EXISTS urls(hash varchar(20) primary key, url varchar(500))"
@@ -51,16 +51,41 @@ rescue SQLite3::ConstraintException => e
 
   # First, see if the postfix was set and is already in there
   if !postfix.empty?
-    statement = urldb.prepare "SELECT hash FROM urls WHERE hashid = ?"
+    statement = urldb.prepare "SELECT hash FROM urls WHERE hash = ?"
     statement.bind_param 1, dbstring(postfix)
     response = statement.execute
     row = response.next
     statement.close if statement
+    urldb.close if urldb
     if !row.nil? # returned at least one row
       raise ArgumentError.new('That postfix has already been taken. Please use a different one or let me generate one.')
     end
   elsif url_exists?(oldurl)
-    # URL already exists in the database, don't bother to generate a new one
+     #URL already exists in the database, don't bother to generate a new one
+    return hash
+  else # URL doesn't exist in the database but the hash does -> collision resolution needed
+    b = 1
+    e = 6
+    while !url_exists?(oldurl)
+      hash = sha[b..e]
+      statement = urldb.prepare "SELECT hash FROM urls WHERE hash = ?"
+      statement.bind_param 1, dbstring(hash)
+      response = statement.execute
+      row = response.next
+      statement.close if statement
+      if row.nil? # We resolved the collision, insert it there
+        urldb = SQLite3::Database.open $dbfile if !urldb
+        urldb.execute "CREATE TABLE IF NOT EXISTS urls(hash varchar(20) primary key, url varchar(500))"
+        statement = urldb.prepare "INSERT INTO urls VALUES (?, ?)"
+        statement = urldb.prepare "INSERT INTO urls VALUES (?, ?)"
+        statement.bind_param 1, dbstring(hash)
+        statement.bind_param 2, dbstring(oldurl)
+        response = statement.execute
+        statement.close if statement
+      end
+      ++b
+      ++e
+    end
     return hash
   end
 rescue SQLite3::Exception => e
