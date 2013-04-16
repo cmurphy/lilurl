@@ -5,7 +5,7 @@ require 'digest/sha1'
 $dbfile = 'lilurl.db'
 
 def geturl(hash)
-  urldb = SQLite3::Database.open $dbfile
+  urldb = open_or_create_db($dbfile)
   statement = urldb.prepare "SELECT url FROM urls WHERE hash = ?"
   statement.bind_param 1, dbstring(hash)
   response = statement.execute
@@ -25,20 +25,14 @@ end
 
 def makeurl(oldurl, postfix = nil)
   # error check oldurl
-  if (!(oldurl =~ /^http:\/\//) and !(oldurl =~ /^https:\/\//)) or oldurl.nil?
-    raise ArgumentError.new('Please submit a valid HTTP URL.')
-  end
+  validate_url(oldurl)
   if postfix.empty?
-    sha = Digest::SHA1.hexdigest oldurl
-    hash = sha[0..5]
+    hash = generate_hash(oldurl)
   else
-    if postfix.length > 20
-      raise ArgumentError.new('Your postfix must be 20 characters or less.')
-    end
+    validate_postfix(postfix)
     hash = postfix
   end
-  urldb = SQLite3::Database.open $dbfile
-  urldb.execute "CREATE TABLE IF NOT EXISTS urls(hash varchar(20) primary key, url varchar(500))"
+  urldb = open_or_create_db($dbfile)
   statement = urldb.prepare "INSERT INTO urls VALUES (?, ?)"
   statement.bind_param 1, dbstring(hash)
   statement.bind_param 2, dbstring(oldurl)
@@ -77,9 +71,6 @@ rescue SQLite3::ConstraintException => e
       row = response.next
       statement.close if statement
       if row.nil? # We resolved the collision, insert it there
-        urldb = SQLite3::Database.open $dbfile if !urldb
-        urldb.execute "CREATE TABLE IF NOT EXISTS urls(hash varchar(20) primary key, url varchar(500))"
-        statement = urldb.prepare "INSERT INTO urls VALUES (?, ?)"
         statement = urldb.prepare "INSERT INTO urls VALUES (?, ?)"
         statement.bind_param 1, dbstring(hash)
         statement.bind_param 2, dbstring(oldurl)
@@ -105,6 +96,17 @@ def dbstring(s)
   end
 end
 
+def generate_hash(url)
+  sha = Digest::SHA1.hexdigest url
+  return sha[0..5]
+end
+
+def open_or_create_db(filename)
+  db = SQLite3::Database.open filename
+  db.execute "CREATE TABLE IF NOT EXISTS urls(hash varchar(20) primary key, url varchar(500))"
+  return db
+end
+
 def url_exists?(url)
   urldb = SQLite3::Database.open $dbfile
   statement = urldb.prepare "SELECT hash FROM urls WHERE url = ?"
@@ -116,4 +118,16 @@ def url_exists?(url)
     return true
   end
   return false
+end
+
+def validate_postfix(postfix)
+  if postfix.length > 20
+    raise ArgumentError.new('Your postfix must be 20 characters or less.')
+  end
+end
+
+def validate_url(url)
+  if (!(oldurl =~ /^http:\/\//) and !(oldurl =~ /^https:\/\//)) or oldurl.nil?
+    raise ArgumentError.new('Please submit a valid HTTP URL.')
+  end
 end
