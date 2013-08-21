@@ -7,7 +7,7 @@
 </form>
 <% if defined? newurl %>
 <div id="newurl">
-Your lil URL: http://<%= domain + "/" + newurl %>
+Your lil URL: <a href="http://<%= domain + "/" + newurl %>">http://<%= domain + "/" + newurl %></a>
 </div>
 <% end %>
 <% if defined? error and !error.nil? %>
