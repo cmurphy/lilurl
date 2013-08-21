@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sqlite3'
 require 'digest/sha1'
+require 'uri'
 
 $dbfile = 'lilurl.db'
 
@@ -15,6 +16,7 @@ def geturl(hash)
   else
     raise ArgumentError.new('LilUrl didn\'t find that URL. Are you sure you copied it right?')
   end
+
 rescue SQLite3::Exception => e
   statement.close if statement
   urldb.close if urldb
@@ -24,9 +26,14 @@ ensure
   urldb.close if urldb
 end
 
+
 def makeurl(oldurl, postfix = nil)
   # error check oldurl
-  if (!(oldurl =~ /^http:\/\//) and !(oldurl =~ /^https:\/\//)) or oldurl.nil?
+  #if (!(oldurl =~ /^http:\/\//) and !(oldurl =~ /^https:\/\//)) or oldurl.nil?
+  #  raise ArgumentError.new('Please submit a valid HTTP URL.')
+  #end
+  uri = URI(oldurl)
+  if uri.scheme.nil?
     raise ArgumentError.new('Please submit a valid HTTP URL.')
   end
   if !postfix.empty?
@@ -47,6 +54,7 @@ def makeurl(oldurl, postfix = nil)
   statement.close if statement
   urldb.close if urldb
   return hash
+
 rescue SQLite3::ConstraintException => e
   # column hash is not unique
   # 1) URL already exists in the database and will hash to the same index
@@ -92,6 +100,7 @@ rescue SQLite3::ConstraintException => e
     end
     return hash
   end
+
 rescue SQLite3::Exception => e
   statement.close if statement
   urldb.close if urldb
