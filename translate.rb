@@ -57,10 +57,10 @@ rescue SQLite3::ConstraintException => e
     response = statement.execute
     row = response.next
     statement.close if statement
-    urldb.close if urldb
     unless row.nil? # returned at least one row
       raise ArgumentError.new('That postfix has already been taken. Please use a different one or let me generate one.')
     end
+    urldb.close if urldb
   elsif url_exists?(oldurl)
      #URL already exists in the database, don't bother to generate a new one
     return hash
