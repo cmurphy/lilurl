@@ -7,7 +7,7 @@ and using SQLite as the backend database.
 
 ## Dependencies:
 
-**Gems:** rubygems, sqlite3, sinatra, digest/sha1
+**Gems:** sqlite3, sinatra
 
 ## Usage
 
