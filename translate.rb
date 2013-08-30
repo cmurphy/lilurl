@@ -29,7 +29,7 @@ end
 
 def makeurl(oldurl, postfix = nil)
   validate_url(oldurl)
-  if postfix.empty?
+  if postfix.to_s.empty?
     hash = generate_hash(oldurl)
   else
     validate_postfix(postfix)
@@ -51,7 +51,7 @@ rescue SQLite3::ConstraintException => e
   # 3) by random chance a new URL hashed to an existing index
 
   # First, see if the postfix was set and is already in there
-  if !postfix.empty?
+  if !postfix.to_s.empty?
     statement = urldb.prepare "SELECT hash FROM urls WHERE hash = ?"
     statement.bind_param 1, dbstring(postfix)
     response = statement.execute
