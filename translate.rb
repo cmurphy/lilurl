@@ -134,6 +134,8 @@ end
 def validate_url(url)
   uri = URI(url)
   if uri.scheme.nil?
-    raise ArgumentError.new('Please submit a valid HTTP URL.')
+    raise ArgumentError.new('Please submit a valid URL.')
   end
+  rescue URI::InvalidURIError => e
+    raise ArgumentError.new('Please submit a valid URL.')
 end
