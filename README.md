@@ -5,6 +5,8 @@
 This is a simple URL shortener written in ruby on Sinatra
 and using SQLite as the backend database.
 
+Working example at http://krinkle.nom.co/lilurl
+
 ## Dependencies:
 
 **Gems:** sqlite3, sinatra, bundler
